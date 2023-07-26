@@ -54,10 +54,13 @@ class Mahasiswa extends Controller
             $tanggalKuliah = htmlspecialchars($_POST['tanggalKuliah']);
             $jamKuliah = htmlspecialchars($_POST['jamKuliah']);
             $dosen = htmlspecialchars($_POST['dosen']);
-            $random = password_hash(rand(1, 5), PASSWORD_DEFAULT);
+            $namaGambar = htmlspecialchars($_FILES['file']['name']);
+            $dirGambar = htmlspecialchars($_FILES['file']['tmp_name']);
+            $targetFile = 'public/images/' . basename($_FILES['file']['name']);
 
-            // move_uploaded_file($tmp_gambar, 'images/' . $nama_gambar);
-            $query = "UPDATE mahasiswa SET nim='$nim', username='$username', jenisKelamin='$jenisKelamin', tanggalKuliah='$tanggalKuliah', jamKuliah='$jamKuliah' ,dosen='$dosen' WHERE uuid = '$uuid'";
+            move_uploaded_file($dirGambar, $targetFile);
+            
+            $query = "UPDATE mahasiswa SET nim='$nim', username='$username', jenisKelamin='$jenisKelamin', tanggalKuliah='$tanggalKuliah', jamKuliah='$jamKuliah' ,dosen='$dosen', nameImage='$namaGambar', dirImage='$dirGambar' WHERE uuid = '$uuid'";
             $result = mysqli_query($this->conn, $query);
             if ($result) {
                 echo '<script>alert("Data behasil ditambahkan");</script>';

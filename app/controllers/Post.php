@@ -23,11 +23,17 @@ class Post extends Controller
             $dosen = htmlspecialchars($_POST['dosen']);
             $namaGambar = htmlspecialchars($_FILES['file']['name']);
             $dirGambar = htmlspecialchars($_FILES['file']['tmp_name']);
-            $random = password_hash(rand(1, 5), PASSWORD_DEFAULT);
+            $random = bin2hex(random_bytes(mt_rand(1, 20)));
+            $targetFile = 'public/images/' . basename($_FILES['file']['name']);
 
-            move_uploaded_file($dirGambar, '/public/images/' . $namaGambar);
-            $query = "INSERT INTO mahasiswa VALUES('$random','$nim','$username','$jenisKelamin', '$tanggalKuliah', '$jamKuliah', '$dosen', '$namaGambar', '$dirGambar')";
-            $result = mysqli_query($this->conn, $query);
+            if (move_uploaded_file($dirGambar, $targetFile)) {
+                $query = "INSERT INTO mahasiswa VALUES('$random','$nim','$username','$jenisKelamin', '$tanggalKuliah', '$jamKuliah', '$dosen', '$namaGambar', '$dirGambar')";
+                $result = mysqli_query($this->conn, $query);
+            } else {
+                echo "
+                <acript>alert(`Unable to upload the image`)</acript>
+                ";
+            }
             if ($result) {
                 echo '<script>alert("Data behasil ditambahkan");</script>';
                 header("location: " . PATH_URL . " /Home/index");
@@ -50,7 +56,7 @@ class Post extends Controller
             $mataKuliah = htmlspecialchars($_POST['mataKuliah']);
             // $nama_gambar = htmlspecialchars($_FILES['file']['name']);
             // $tmp_gambar = htmlspecialchars($_FILES['file']['tmp_name']);
-            $random = password_hash(rand(1, 5), PASSWORD_DEFAULT);
+            $random = bin2hex(random_bytes(mt_rand(1, 20)));
 
             // move_uploaded_file($tmp_gambar, 'images/' . $nama_gambar);
             $query = "INSERT INTO dosen VALUES('$random','$code','$username','$jenisKelamin', '$tanggalKuliah', '$mataKuliah')";
@@ -72,7 +78,7 @@ class Post extends Controller
             $username = htmlspecialchars($_POST['username']);
             $sks = htmlspecialchars($_POST['sks']);
             $semester = htmlspecialchars($_POST['semester']);
-            $random = password_hash(rand(1, 5), PASSWORD_DEFAULT);
+            $random = bin2hex(random_bytes(mt_rand(1, 20)));
 
             // move_uploaded_file($tmp_gambar, 'images/' . $nama_gambar);
             $query = "INSERT INTO matakuliah VALUES('$random','$code','$username','$sks', '$semester')";

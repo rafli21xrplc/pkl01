@@ -1,6 +1,5 @@
 <?php include("app/views/Components/navbar.php"); ?>
 
-
 <h1 class="text-3xl font-bold ">
     <div class="overflow-x-auto">
         <div class="min-h-screen bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-hidden">

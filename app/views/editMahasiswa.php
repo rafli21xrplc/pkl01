@@ -10,7 +10,7 @@
 <body class="bg-gray-100">
     <div class="flex items-center justify-center p-12">
         <div class="mx-auto w-full max-w-[550px]">
-            <form method="post" action="<?= PATH_URL ?>/Mahasiswa/validationMahasiswa">
+            <form method="post" action="<?= PATH_URL ?>/Mahasiswa/validationMahasiswa" enctype="multipart/form-data">
                 <input type="hidden" name="uuid" value="<?= $datas['datas']['uuid'] ?>">
                 <div class="-mx-3 flex flex-wrap">
                     <div class="w-full px-3">
@@ -19,6 +19,25 @@
                                 NIM
                             </label>
                             <input type="number" value="<?= $datas['datas']['nim'] ?>" name="nim" id="nim" placeholder="Full Name" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                        </div>
+                    </div>
+                </div>
+                <div class="-mx-3 flex flex-wrap">
+                    <div class="w-full px-3 mb-5">
+                        <label for="nim" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Image Profile
+                        </label>
+                        <div class="flex gap-10">
+                            <div class="flex justify-center">
+                                <span class="font-medium text-center w-32 h-32"><img src="<?= PATH_URL ?>/public/images/<?= $datas['datas']['nameImage'] ?>" alt="Image"></span>
+                            </div>
+                            <label for="dropzone-file" class="mx-auto cursor-pointer flex w-full flex-col items-center rounded-xl border-2 border-dashed border-blue-400 bg-white p-6 text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                                <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">Payment File</h2>
+                                <p class="mt-2 text-gray-500 tracking-wide">Upload or darg & drop your file SVG, PNG, JPG or GIF. </p>
+                                <input id="dropzone-file" type="file" name="file" class="hidden" />
                         </div>
                     </div>
                 </div>

@@ -10,7 +10,7 @@
 <body class="bg-gray-100">
     <div class="flex items-center justify-center p-12 bg-gray-100">
         <div class="mx-auto w-full max-w-[550px]">
-            <form method="post" action="<?= PATH_URL ?>/Post/validationMahasiswa" enctype="multipart/form-data">
+            <form action="<?= PATH_URL ?>/Post/validationMahasiswa" method="post" enctype="multipart/form-data">
                 <div class="-mx-3 flex flex-wrap">
                     <div class="w-full px-3">
                         <div class="mb-5">

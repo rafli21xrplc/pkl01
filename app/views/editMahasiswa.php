@@ -12,6 +12,7 @@
         <div class="mx-auto w-full max-w-[550px]">
             <form method="post" action="<?= PATH_URL ?>/Mahasiswa/validationMahasiswa" enctype="multipart/form-data">
                 <input type="hidden" name="uuid" value="<?= $datas['datas']['uuid'] ?>">
+                <input type="hidden" name="nameImage" value="<?= $datas['datas']['nameImage'] ?>">
                 <div class="-mx-3 flex flex-wrap">
                     <div class="w-full px-3">
                         <div class="mb-5">

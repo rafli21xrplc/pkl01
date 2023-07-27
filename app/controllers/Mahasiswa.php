@@ -39,14 +39,20 @@ class Mahasiswa extends Controller
     public function delete()
     {
         $url = explode('/', $_GET['url']);
-        $query = "DELETE FROM mahasiswa where uuid='$url[2]'";
-        $result = mysqli_query($this->conn, $query);
-        if ($result) header("location: " . PATH_URL . "/Mahasiswa/index");
+        $where = "SELECT nameImage FROM mahasiswa where uuid='$url[2]'";
+        $image = mysqli_fetch_assoc(mysqli_query($this->conn, $where))['nameImage'];
+
+        if (unlink("public/images/$image")) {
+            $query = "DELETE FROM mahasiswa where uuid='$url[2]'";
+            $result = mysqli_query($this->conn, $query);
+            if ($result) header("location: " . PATH_URL . "/Mahasiswa/index");
+        }
     }
 
     public function validationMahasiswa()
     {
         if (isset($_POST['submit'])) {
+
             $uuid = $_POST['uuid'];
             $nim = htmlspecialchars($_POST['nim']);
             $username = htmlspecialchars($_POST['username']);
@@ -54,19 +60,30 @@ class Mahasiswa extends Controller
             $tanggalKuliah = htmlspecialchars($_POST['tanggalKuliah']);
             $jamKuliah = htmlspecialchars($_POST['jamKuliah']);
             $dosen = htmlspecialchars($_POST['dosen']);
+            $namaGambarLama = htmlspecialchars($_POST['nameImage']);
             $namaGambar = htmlspecialchars($_FILES['file']['name']);
-            $dirGambar = htmlspecialchars($_FILES['file']['tmp_name']);
-            $targetFile = 'public/images/' . basename($_FILES['file']['name']);
 
-            move_uploaded_file($dirGambar, $targetFile);
-            
-            $query = "UPDATE mahasiswa SET nim='$nim', username='$username', jenisKelamin='$jenisKelamin', tanggalKuliah='$tanggalKuliah', jamKuliah='$jamKuliah' ,dosen='$dosen', nameImage='$namaGambar', dirImage='$dirGambar' WHERE uuid = '$uuid'";
-            $result = mysqli_query($this->conn, $query);
-            if ($result) {
-                echo '<script>alert("Data behasil ditambahkan");</script>';
-                header("location: " . PATH_URL . " /Mahasiswa/index");
-            } else {
-                echo '<script>alert("Terjadi Kesalahan");</script>';
+            if ($_FILES['file']['size'] < 2097152) {
+                if ($_FILES['file']['error'] === 0) {
+                    unlink("public/images/$namaGambarLama");
+                    $namaGambar = bin2hex(random_bytes(mt_rand(1, 20))) . "." . explode("/", $_FILES['file']['type'])[1];
+                } else {
+                    $namaGambar = $namaGambarLama;
+                }
+
+                $targetFile = 'public/images/' . basename($namaGambar);
+                $dirGambar = htmlspecialchars($_FILES['file']['tmp_name']);
+                move_uploaded_file($dirGambar, $targetFile);
+
+
+                $query = "UPDATE mahasiswa SET nim='$nim', username='$username', jenisKelamin='$jenisKelamin', tanggalKuliah='$tanggalKuliah', jamKuliah='$jamKuliah' ,dosen='$dosen', nameImage='$namaGambar', dirImage='$dirGambar' WHERE uuid = '$uuid'";
+                $result = mysqli_query($this->conn, $query);
+                if ($result) {
+                    echo '<script>alert("Data behasil ditambahkan");</script>';
+                    header("location: " . PATH_URL . " /Mahasiswa/index");
+                } else {
+                    echo '<script>alert("Terjadi Kesalahan");</script>';
+                }
             }
         }
     }

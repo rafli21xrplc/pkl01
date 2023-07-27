@@ -21,24 +21,26 @@ class Post extends Controller
             $tanggalKuliah = htmlspecialchars($_POST['tanggalKuliah']);
             $jamKuliah = htmlspecialchars($_POST['jamKuliah']);
             $dosen = htmlspecialchars($_POST['dosen']);
-            $namaGambar = htmlspecialchars($_FILES['file']['name']);
-            $dirGambar = htmlspecialchars($_FILES['file']['tmp_name']);
             $random = bin2hex(random_bytes(mt_rand(1, 20)));
-            $targetFile = 'public/images/' . basename($_FILES['file']['name']);
+            $uniqeNameImage = bin2hex(random_bytes(mt_rand(1, 20))) . "." . explode("/", $_FILES['file']['type'])[1];
+            $targetFile = 'public/images/' . basename($uniqeNameImage);
+            $dirGambar = htmlspecialchars($_FILES['file']['tmp_name']);
 
-            if (move_uploaded_file($dirGambar, $targetFile)) {
-                $query = "INSERT INTO mahasiswa VALUES('$random','$nim','$username','$jenisKelamin', '$tanggalKuliah', '$jamKuliah', '$dosen', '$namaGambar', '$dirGambar')";
-                $result = mysqli_query($this->conn, $query);
-            } else {
-                echo "
+            if ($_FILES['file']['size'] < 2097152) {
+                if (move_uploaded_file($dirGambar, $targetFile)) {
+                    $query = "INSERT INTO mahasiswa VALUES('$random','$nim','$username','$jenisKelamin', '$tanggalKuliah', '$jamKuliah', '$dosen', '$uniqeNameImage', '$dirGambar')";
+                    $result = mysqli_query($this->conn, $query);
+                } else {
+                    echo "
                 <acript>alert(`Unable to upload the image`)</acript>
                 ";
-            }
-            if ($result) {
-                echo '<script>alert("Data behasil ditambahkan");</script>';
-                header("location: " . PATH_URL . " /Home/index");
-            } else {
-                echo '<script>alert("Terjadi Kesalahan");</script>';
+                }
+                if ($result) {
+                    echo '<script>alert("Data behasil ditambahkan");</script>';
+                    header("location: " . PATH_URL . " /Home/index");
+                } else {
+                    echo '<script>alert("Terjadi Kesalahan");</script>';
+                }
             }
         }
     }
